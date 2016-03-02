@@ -1,3 +1,10 @@
 EMail Crawler
 ---------------------------------------------
 
+- Requires python 2.7
+- Requires BeautifulSoup - To install , do $ apt-get install python-bs4 or
+  pip install beautifulsoup4 
+- To run the program
+	python find_email_addresses.py 'jana.com'
+
+
