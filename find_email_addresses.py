@@ -37,6 +37,7 @@ import argparse
 import re
 import queue
 import time
+import random
 
 class Crawler(object):
     def __init__(self, url, delay, maxpages, outfile, verbose):
@@ -150,6 +151,27 @@ class Crawler(object):
         crawled = []
         tocrawl.put(self.url)
 
+        #setup some headers to fool sites that try to prevent scraping :p
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
+            'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
+            'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:41.0) Gecko/20100101 Firefox/41.0',
+            'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:41.0) Gecko/20100101 Firefox/41.0',
+        ]
+
+        user_agent = random.choice(user_agents)
+
+        headers = {
+            'User-Agent': user_agent,
+            'Referer': self.url
+        }
+
         while tocrawl.qsize():
 
             if pagecount == self.maxpages:
@@ -165,8 +187,9 @@ class Crawler(object):
 
                 # skip dead links and pages we've already crawled
                 try:
-                    pageContent = urllib.request.urlopen(link, None)
-                    page = BeautifulSoup(pageContent, 'html.parser')
+                    req = urllib.request.Request(link, None, headers)
+                    page_content = urllib.request.urlopen(req)
+                    page = BeautifulSoup(page_content, 'html.parser')
 
                     crawled.append(link)
 
@@ -203,8 +226,6 @@ class Crawler(object):
     def debug(self, msg, prefix='DEBUG'):
         if self.verbose:
             print(prefix + ' ' + str(msg))
-
-
 
 
 if __name__ == "__main__":
