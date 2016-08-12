@@ -1,10 +1,38 @@
 EMail Crawler
 ---------------------------------------------
 
-- Requires python 2.7
-- Requires BeautifulSoup - To install , do $ apt-get install python-bs4 or
-  pip install beautifulsoup4 
-- To run the program
-	python find_email_addresses.py 'jana.com'
+- Requires python 3.x
+- Requires BeautifulSoup library
+  To install:
+    apt-get install python3-bs4
+    -or-
+    pip3 install beautifulsoup4
+
+
+This script supports extracting multiple email addresses in mailto links from multiple webpages on any number of supplied domains.
+The page crawler is somewhat intelligent (it will skip assets like images, videos and documents as well as skipping offsite links.
+It also normalizes links that don't have the FQDN in the href.
+
+This doesn't parse javascript, so obfuscated emails are not detected. If I get any more spare time, I will see about adding that support.
+You can also set a crawl rate (delay) and maximum number of pages.
+
+Duplicate emails per domain are also stripped out. You're welcome :p
+
+sample use:
+
+python3 find_email_addresses.py --domains www.rapidtables.com/web/html/mailto.htm https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links --delay 1 --maxpages 2
+
+Checking http://www.rapidtables.com/web/html/mailto.htm for email addresses.
+The following emails were found:
+name3@rapidtables.com
+name1@rapidtables.com
+name@rapidtables.com
+name2@rapidtables.com
+Checking https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links for email addresses.
+The following emails were found:
+nobody@mozilla.org
+nowhere@mozilla.org
+
+If you run into problems, enable debug mode by supplying --verbose on the command line
 
 
