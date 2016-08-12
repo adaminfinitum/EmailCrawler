@@ -4,6 +4,8 @@
 #
 # @copyright 2016 Nicholas Hinsch, based on work by Arun-UB https://github.com/Arun-UB
 #
+# @license MIT
+#
 # This script supports extracting multiple email addresses in mailto links from multiple webpages on any number of supplied domains.
 # The page crawler is somewhat intelligent (it will skip assets like images, videos and documents as well as skipping offsite links.
 # It also normalizes links that don't have the FQDN in the href.
