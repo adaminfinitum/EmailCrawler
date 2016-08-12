@@ -13,7 +13,7 @@
 #
 # Duplicate emails per domain are also stripped out. You're welcome :p
 # sample use:
-# python3 find_email_addresses.py --domains www.rapidtables.com/web/html/mailto.htm https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links --delay 1 --maxpages 2
+# python3 find_email_addresses.py --domains www.rapidtables.com/web/html/mailto.htm https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links --delay 1 --maxpages 2 --outfile emails.txt
 #
 # Checking http://www.rapidtables.com/web/html/mailto.htm for email addresses.
 # The following emails were found:
