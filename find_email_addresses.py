@@ -15,16 +15,18 @@
 # sample use:
 # python3 find_email_addresses.py --domains www.rapidtables.com/web/html/mailto.htm https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links --delay 1 --maxpages 2 --outfile emails.txt
 #
-# Checking http://www.rapidtables.com/web/html/mailto.htm for email addresses.
-# The following emails were found:
-# name3@rapidtables.com
-# name1@rapidtables.com
-# name@rapidtables.com
-# name2@rapidtables.com
-# Checking https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Email_links for email addresses.
-# The following emails were found:
-# nobody@mozilla.org
-# nowhere@mozilla.org
+# Crawling www.rapidtables.com for email addresses.
+# - Found email addresses:
+# -- name1@rapidtables.com
+# -- name2@rapidtables.com
+# -- name@rapidtables.com
+# -- name3@rapidtables.com
+#
+# Crawling developer.mozilla.org for email addresses.
+# - Found email addresses:
+# -- nowhere@mozilla.org
+# -- nobody@mozilla.org
+
 #
 # If you run into problems, enable debug mode by supplying --verbose on the command line
 #
