@@ -37,11 +37,12 @@ import queue
 import time
 
 class Crawler(object):
-    def __init__(self, url, delay, maxpages, verbose):
+    def __init__(self, url, delay, maxpages, outfile, verbose):
 
         self.delay = delay
         self.maxpages = maxpages
         self.verbose = verbose
+        self.outfile = outfile
 
         # normalize the supplied url protocol
         if not re.match('https?://|www\\\.', url):
@@ -56,7 +57,15 @@ class Crawler(object):
         self.emails = []
 
     def get_emails(self):
-        return list(set(self.emails))
+
+        addresses = list(set(self.emails))
+
+        if self.outfile:
+            with open(self.outfile, "a") as text_file:
+                for i in addresses:
+                    print(i, file=text_file)
+
+        return addresses
 
     def extract_emails(self, page):
         for link in page.select('a[href^=mailto]'):
@@ -222,20 +231,26 @@ if __name__ == "__main__":
         help='Enable verbose mode. This prints a fuck-load of debug info to stdout (your terminal).'
     )
 
+    parser.add_argument(
+        '--outfile',
+        help='Save scraped email addresses to a txt file, newline delimited.'
+    )
+
     args = parser.parse_args()
 
     domains = args.domains
     delay = int(args.delay)
     maxpages = int(args.maxpages)
     verbose = args.verbose
+    outfile = args.outfile
 
     for domain in domains:
 
-        c = Crawler(str(domain).strip(), delay, maxpages, verbose)
+        c = Crawler(str(domain).strip(), delay, maxpages, outfile, verbose)
 
-        print("Checking " + c.url + " for email addresses.")
+        print("\nCrawling " + c.domainName + " for email addresses.")
         c.crawl()
 
-        print("The following emails were found:")
+        print("- Found email addresses:")
         for email in c.get_emails():
-            print(email)
+            print('-- ' + email)
