@@ -28,12 +28,12 @@
 # - Found email addresses:
 # -- nowhere@mozilla.org
 # -- nobody@mozilla.org
-
 #
 # If you run into problems, enable debug mode by supplying --verbose on the command line
 #
 
 from bs4 import BeautifulSoup
+import html
 import urllib
 import argparse
 import re
@@ -79,12 +79,27 @@ class Crawler(object):
             emailaddresses = link.get('href')[7:].split(',')
 
             for addy in emailaddresses:
-                #extract any additional recipients, cc's and bcc's
-                pattern = re.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
+                #extract recipients, cc's and bcc's
 
-                all_recipients = pattern.findall(addy)
+                all_recipients = []
 
-                # this additional loop also removes duplicates, albeit in a not so elegant way
+                # defeat some basic obfuscation techniques (html entities, urlencode)
+                if '?' not in addy:
+                    if '#&' or '%' in addy:
+                        # obfuscated email address
+                        deobfus = html.unescape(addy)
+                        if '@' in deobfus:
+                            all_recipients.append(deobfus)
+
+                elif '?' in addy:
+                    # multiple email addresses in this mailto
+                    pattern = re.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
+                    all_recipients = pattern.findall(addy)
+
+                else:
+                    # just a standard email address, plain and simple
+                    all_recipients.append(addy)
+
                 for i in all_recipients:
                     self.emails.append(i)
 
